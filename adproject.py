@@ -34,8 +34,8 @@ class Bingogame(QWidget):
 
         self.title = QLabel(self)  # 누구 차례입니다 출력
         font = self.title.font()
-        font.setPointSize(20)
-        self.title.setFont(font)
+        font.setPointSize(20) # 글자 크기 설정
+        self.title.setFont(font) # 글자 크기 적용
 
         self.numbutton = [x for x in range(0, 10)]
 
@@ -45,19 +45,22 @@ class Bingogame(QWidget):
         self.gobutton = Button('go!', self.buttonClicked)
 
         self.bingoboard = QTextEdit(self)  # 빙고판 보여줄 Textedit
-        self.bingoboard.setReadOnly(True)
+        self.bingoboard.setReadOnly(True) # 읽기 모드로 전환
         font1 = self.bingoboard.font()
-        font1.setPointSize(font1.pointSize() + 10)
-        self.bingoboard.setFont(font1)
-        self.bingoboard.setAlignment(Qt.AlignCenter)
+        font1.setPointSize(font1.pointSize() + 10) # 글자 크기 조정
+        self.bingoboard.setFont(font1) # 적용
+        self.bingoboard.setAlignment(Qt.AlignCenter) # 가운데 정렬
 
 
         self.enterednum = QLineEdit(self)  # 입력한 숫자 보여줄 lineedit
-        self.enterednum.setReadOnly(True)
+        self.enterednum.setReadOnly(True) # 읽기 모드로 전환
+        self.enterednum.setFixedWidth(360)  # lineedit 너비 조정하는 메소드
+
         self.state = QLineEdit(self) # 입력한 숫자의 상태를 보여줌
-        self.state.setReadOnly(True)
+        self.state.setReadOnly(True) # 읽기 모드로 전환
+
         self.writenum = QLineEdit(self)  # 지금 입력할 숫자를 보여줄 lineedit
-        self.writenum.setReadOnly(True)
+        self.writenum.setReadOnly(True) # 읽기 모드로 전환
 
         hbox = QHBoxLayout() # 첫번째 줄("~~차례입니다." 출력)
         hbox1 = QHBoxLayout() # 두번째 줄(빙고판 출력)
@@ -99,18 +102,18 @@ class Bingogame(QWidget):
         vbox.addLayout(hbox4)
 
         hbox5.addStretch(1)
-        for i in range(1, 7):
+        for i in range(1, 7): # 숫자키 1 ~ 6
             hbox5.addWidget(self.numbutton[i])
         hbox5.addStretch(1)
 
         vbox.addLayout(hbox5)
 
         hbox6.addStretch(1)
-        for i in range(7, 10):
+        for i in range(7, 10): # 숫자키 7 ~ 9
             hbox6.addWidget(self.numbutton[i])
-        hbox6.addWidget(self.numbutton[0])
-        hbox6.addWidget(self.bsbutton)
-        hbox6.addWidget(self.gobutton)
+        hbox6.addWidget(self.numbutton[0]) # 숫자키 0
+        hbox6.addWidget(self.bsbutton) # backspace 버튼
+        hbox6.addWidget(self.gobutton) # go! 버튼
         hbox6.addStretch(1)
 
         vbox.addLayout(hbox6)
@@ -118,73 +121,75 @@ class Bingogame(QWidget):
         self.setLayout(vbox)
 
 
-        self.setWindowTitle('Bingo game')
-        self.move(300, 300)
-        self.resize(300, 370)
-        self.startgame()
+        self.setWindowTitle('Bingo game') # 창 제목 설정
+        self.move(300, 300) # 위치 조정
+        self.resize(300, 370) # 창 크지 조정
+        self.startgame() # 게임 스타트!!
 
     def buttonClicked(self): # 버튼 기능 구현
         button = self.sender()
-        key = button.text()
-        if key == '<-':
-            result = self.writenum.text()
-            result = result[:-1]
-            self.writenum.setText(result)
-        elif key == 'go!':
-            self.gonumber()
-        else:
-            self.writenum.setText(self.writenum.text() + key)
+        key = button.text() # 각 버튼 이름
+        if key == '<-': # backspace 버튼을 누르면
+            result = self.writenum.text() # 현재 입력되어있는 str 가져오고
+            result = result[:-1] # 그 str의 마지막 글자를 빼고 다시 정의
+            self.writenum.setText(result) # 마지막 글자를 뺀 str 다시 넣기
+        elif key == 'go!': # go! 버튼을 누르면
+            self.gonumber() # 아래의 go! 함수 적용
+        else: # 그 외에 숫자키가 입력되면
+            self.writenum.setText(self.writenum.text() + key) # 그 숫자를 입력
 
-    def startgame(self):
-        self.bingo = BingoCheck()
-        for i in range(2):
+    def startgame(self): # 게임 시작했을 때 세팅
+        self.bingo = BingoCheck() # BingoCheck 클래스의 인스턴스를 만듬
+        for i in range(2): # 빙고판 2개 만들기
             self.bingo.board()
-        self.title.setText(self.bingo.settitle())
-        self.bingoboard.setText(self.bingo.showboard())
-        self.bingoboard.selectAll()
-        self.bingoboard.setAlignment(Qt.AlignCenter)
-        self.bingoboard.moveCursor(QTextCursor.End)
-        self.enterednum.setText(self.bingo.showusednum())
-        self.writenum.clear()
+        self.title.setText(self.bingo.settitle()) # 제목 적용
+        self.bingoboard.setText(self.bingo.showboard()) # 1p 빙고판 보여주기
+        self.bingoboard.selectAll() # 입력한 빙고판을 선택해서
+        self.bingoboard.setAlignment(Qt.AlignCenter) # 가운데 정렬
+        self.bingoboard.moveCursor(QTextCursor.End) # 선택된 커서 제거
+        self.enterednum.setText(self.bingo.showusednum()) # 입력한 숫자 보여주기(처음이라 아무것도 없음)
+        self.writenum.clear() # 입력한 숫자 제거
 
-    def gonumber(self):
-        gonum = self.writenum.text()
-        self.Check = check()
-        self.writenum.clear()
+    def gonumber(self): # 버튼 go!를 눌렀을 때 적용할 함수
+        gonum = self.writenum.text() # 입력된 숫자를 저장
+        self.Check = check() # check 클래스의 인스턴스 만듬
+        self.writenum.clear() # 입력한 숫자 제거
 
-        if len(gonum) == 0:
-            self.state.setText("please write number")
+        if len(gonum) == 0: # 만약 아무것도 입력을 안했다면
+            self.state.setText("please write number") # 상태창에 메세지 출력
             return self.state.text()
 
-        if self.Check.numCheck(gonum) == False:
-            self.state.setText("wrong number")
+        if self.Check.numCheck(gonum) == False: # 만약 입력한 숫자가 범위를 벗어나거나 잘못된 숫자이면
+            self.state.setText("wrong number") # 상태창에 메세지 출력
             return self.state.text()
 
-        if gonum in self.bingo.usednum:
-            self.state.setText("already used")
+        if gonum in self.bingo.usednum: # 만약 입력한 숫자가 이미 입력한 숫자이면
+            self.state.setText("already used") # 상태창에 메세지 출력
             return self.state.text()
 
+        # 여기부터는 오류가 없으면 실행함
         for i in range(2):
-            self.bingo.boardlist[i] = self.Check.numCorrect(self.bingo.boardlist[i], gonum)
+            self.bingo.boardlist[i] = self.Check.numCorrect(self.bingo.boardlist[i], gonum) # 빙고판에 일치하는 숫자가 있는지 확인, 그리고 일치하면 0으로 바꿈
 
-        if self.bingo.finish(self.bingo.whoturn() - 1) == True:
-            self.bsbutton.setDisabled(True)
+        if self.bingo.finish(self.bingo.whoturn() - 1) == True: # 만약 현재턴의 빙고판이 2빙고이상 이라면 -> 이긴 사람
+            self.bsbutton.setDisabled(True) # 끝났지만 숫자를 입력해서 만들 버그를 생각해서 backspace, go! 버튼 비활성화
             self.gobutton.setDisabled(True)
-            if self.bingo.finish(1 - (self.bingo.whoturn() - 1)) == True:
-                self.bingoboard.clear()
-                self.bingoboard.append(f"winner : " + " ".join(self.bingo.winplayer))
-            else:
-                self.bingoboard.clear()
-                self.bingoboard.append(f"winner : " + " ".join(self.bingo.winplayer))
 
-        else:
-            if self.bingo.finish(1 - (self.bingo.whoturn() - 1)) == True:
+            if self.bingo.finish(1 - (self.bingo.whoturn() - 1)) == True: # 만약 다른 사람의 빙고판이 동시에 2빙고이상이 된다면
                 self.bingoboard.clear()
-                self.bingoboard.append(f"winner : " + " ".join(self.bingo.winplayer))
-            else:
-                self.bingo.turnup()
-                self.bingo.usednum.append(gonum)
-                self.title.setText(self.bingo.settitle())
+                self.bingoboard.append(f"winner : " + " ".join(self.bingo.winplayer)) # winner 출력
+            else: # 다른 사람이 2빙고이상이 아니라면 -> 진 사람
+                self.bingoboard.clear()
+                self.bingoboard.append(f"winner : " + " ".join(self.bingo.winplayer)) # winner 출력
+
+        else: # 만약 현재턴의 빙고판이 2빙고이상이 아니라면
+            if self.bingo.finish(1 - (self.bingo.whoturn() - 1)) == True: # 그런데 다른 사람의 빙고판이 2빙고 이상이 됬다면 -> 게임을 이김
+                self.bingoboard.clear()
+                self.bingoboard.append(f"winner : " + " ".join(self.bingo.winplayer)) # winner 출력
+            else: # 만약 둘 다 2빙고 이상이 아니라면 -> 게임이 안 끝남
+                self.bingo.turnup() # 턴 수 증가
+                self.bingo.usednum.append(gonum) # 사용한 숫자 추가
+                self.title.setText(self.bingo.settitle()) # 여기서 부터는 startgame 과 동일
                 self.bingoboard.setText(self.bingo.showboard())
                 self.bingoboard.selectAll()
                 self.bingoboard.setAlignment(Qt.AlignCenter)
