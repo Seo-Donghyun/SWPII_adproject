@@ -13,7 +13,7 @@ class check:
         for i in range(4):
             for j in range(4):
                 if board[i][j] == num: # 만약 입력받은 수가 빙고판에 있다면
-                    board[i][j] = str("O") # 빙고판에 해당 수를 0으로 바꿈
+                    board[i][j] = str("O") # 빙고판에 해당 수를 "O"으로 바꿈
                 else:
                     continue
         return board

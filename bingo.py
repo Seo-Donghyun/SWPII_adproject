@@ -20,9 +20,9 @@ class BingoCheck:
             for j in range(4):
                 self.board_[i][j] = str(list_[idx]) # 빙고판 하나씩 숫자 넣음(str형태로)
                 idx += 1
-        # for a in self.board_: # 여기는 테스트 할 때 빙고판을 볼 수 있도록 만든 코드
-        #     print(a)
-        # print('')
+        for a in self.board_: # 여기는 테스트 할 때 빙고판을 볼 수 있도록 만든 코드
+            print(a)
+        print('')
         self.boardlist.append(self.board_) # 만들어진 빙고판을 boardlist에 저장
         self.board_ = [[0 for i in range(4)] for j in range(4)] # 빙고판의 기본상태로 다시 돌림
 
@@ -56,7 +56,7 @@ class BingoCheck:
                     continue
                 else:
                     break
-            else: # 만약 가로 한 줄이 전부 "0"라면, 빙고이므로
+            else: # 만약 가로 한 줄이 전부 "O"라면, 빙고이므로
                 self.bingo += 1 # 빙고 수 증가
 
         for i in range(4):  # 세로
@@ -65,7 +65,7 @@ class BingoCheck:
                     continue
                 else:
                     break
-            else: # 만약 세로 한 줄이 전부 "0"라면, 빙고이므로
+            else: # 만약 세로 한 줄이 전부 "O"라면, 빙고이므로
                 self.bingo += 1 # 빙고 수 증가
 
         for i in range(4):  # 대각선(왼쪽 위 ~ 오른쪽 아래)
@@ -73,7 +73,7 @@ class BingoCheck:
                 continue
             else:
                 break
-        else: # 만약 대각선 한 줄이 전부 "0"라면, 빙고이므로
+        else: # 만약 대각선 한 줄이 전부 "O"라면, 빙고이므로
             self.bingo += 1 # 빙고 수 증가
 
         for i in range(4):  # 대각선
@@ -81,7 +81,7 @@ class BingoCheck:
                 continue
             else:
                 break
-        else: # 만약 대각선 한 줄이 전부 "0"라면, 빙고이므로
+        else: # 만약 대각선 한 줄이 전부 "O"라면, 빙고이므로
             self.bingo += 1 # 빙고 수 증가
 
         if self.bingo >= 2: # 2빙고 이상이라면 -> 이겼다
